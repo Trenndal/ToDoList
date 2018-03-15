@@ -1,3 +1,3 @@
-ToDoList v0.2-dev
+ToDoList v0.3-dev
 ========
 Project Symfony 3.4
