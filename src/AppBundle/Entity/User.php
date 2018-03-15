@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use AppBundle\Entity\Task;
 
 /**
  * @ORM\Table("user")
@@ -38,6 +39,28 @@ class User implements UserInterface
      * @Assert\Email(message="Le format de l'adresse n'est pas correcte.")
      */
     private $email;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Task", mappedBy="user", cascade={"all"})
+     */
+    private $tasks;
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="roles", type="array")
+     * @Assert\Count(
+     *      min = 1,
+     *      minMessage = "Un role minimum"
+     * )
+     */
+    private $roles;
+
+    public function __construct()
+    {
+        $this->roles = array('ROLE_USER');
+        $this->tasks = new ArrayCollection();
+    }
 
     public function getId()
     {
@@ -79,12 +102,69 @@ class User implements UserInterface
         $this->email = $email;
     }
 
+    /**
+     * Set roles
+     *
+     * @param array $roles
+     *
+     * @return User
+     */
+    public function setRoles($roles)
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * Get roles
+     *
+     * @return array
+     */
     public function getRoles()
     {
-        return array('ROLE_USER');
+        if ($this->roles===null) {
+            return array('ROLE_USER');
+        }
+        return $this->roles;
     }
 
     public function eraseCredentials()
     {
+    }
+
+    /**
+     * Add task
+     *
+     * @param \AppBundle\Entity\Task $task
+     *
+     * @return User
+     */
+    public function addTask(\AppBundle\Entity\Task $task)
+    {
+        $this->tasks[] = $task;
+        $task->setUser($this);
+
+        return $this;
+    }
+
+    /**
+     * Remove task
+     *
+     * @param \AppBundle\Entity\Task $task
+     */
+    public function removeTask(\AppBundle\Entity\Task $task)
+    {
+        $this->tasks->removeElement($task);
+    }
+
+    /**
+     * Get tasks
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTasks()
+    {
+        return $this->tasks;
     }
 }

@@ -21,23 +21,34 @@ class AppLoader implements FixtureInterface
         $user->setPassword($name);
         $user->setEmail($name . "@yopmail.com");
 
-        //$user->setRoles(array('ROLE_USER'));
+        $user->setRoles(array('ROLE_USER'));
 
         $listTasks = array('Do this', 'Do that', 'Do nothing');
         foreach ($listTasks as $taskName) {
             $task = new Task();
             $task->setTitle($taskName);
             $task->setContent($taskName);
-            //$task->setUser($user);
+            
+            $task->setUser($user);
+            
             if($taskName == "Do nothing") {
                 $task->toggle(true);
             }
-            //$user->addTask($task);
+            
+            $user->addTask($task);
+            
             $manager->persist($task);
         }
 
         $manager->persist($user);
     }
+
+    $user = new User();
+    $user->setUsername("Admin");
+    $user->setPassword("Admin");
+    $user->setEmail("Admin@yopmail.com");
+    $user->setRoles(array('ROLE_ADMIN'));
+    $manager->persist($user);
 
     $manager->flush();
   }
