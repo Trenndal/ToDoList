@@ -4,11 +4,12 @@
 namespace Tests\AppBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use AppBundle\Entity\User;
 use AppBundle\Entity\Task;
 
-class AppLoader implements FixtureInterface
+class AppLoader extends Fixture implements FixtureInterface
 {
   public function load(ObjectManager $manager)
   {
