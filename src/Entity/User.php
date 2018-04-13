@@ -128,7 +128,7 @@ class User implements UserInterface
      */
     public function getRoles()
     {
-        if ($this->roles===null) {
+        if ($this->roles === null) {
             return array('ROLE_USER');
         }
         return $this->roles;
