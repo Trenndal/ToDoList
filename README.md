@@ -1,3 +1,3 @@
-ToDoList v0.4-dev
+ToDoList v0.4
 ========
 Project Symfony 4
