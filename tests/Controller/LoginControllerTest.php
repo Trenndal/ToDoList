@@ -51,7 +51,24 @@ class LoginControllerTest extends WebTestCase
     {
         $this->client=static::createClient(array(), array());
         $this->user=static::createClient(array(), array('PHP_AUTH_USER' => 'Test', 'PHP_AUTH_PW'   => 'Test'));
+        $this->logIn($this->client);
+        $this->logIn($this->user);
 
+    }
+
+    private function logIn($client)
+    {
+        $session = $client->getContainer()->get('session');
+
+        // the firewall context defaults to the firewall name
+        $firewallContext = 'secured_area';
+
+        $token = new UsernamePasswordToken('admin', null, $firewallContext, array('ROLE_ADMIN'));
+        $session->set('_security_'.$firewallContext, serialize($token));
+        $session->save();
+
+        $cookie = new Cookie($session->getName(), $session->getId());
+        $client->getCookieJar()->set($cookie);
     }
 
     public function testTaskAccess()

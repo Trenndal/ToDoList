@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @ORM\Entity
@@ -54,6 +55,9 @@ class Task
         $this->isDone = false;
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function getId()
     {
         return $this->id;

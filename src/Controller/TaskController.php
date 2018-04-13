@@ -30,6 +30,8 @@ class TaskController extends Controller
 
         if ($form->isSubmitted()) {
             $em = $this->getDoctrine()->getManager();
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $task->setUser($user);
 
             $em->persist($task);
             $em->flush();

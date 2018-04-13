@@ -3,10 +3,20 @@
 namespace Tests\Entity;
 
 use App\Entity\Task;
+use App\Entity\User;
 use PHPUnit\Framework\TestCase;
 
 class TaskTest extends TestCase
 {
+    public function testUser()
+    {
+        $task = new Task();
+        $user = new User();
+        
+        $task->setUser($user);
+        $this->assertSame($user, $task->getUser());
+    }
+
     public function testIsDone()
     {
         $task = new Task();

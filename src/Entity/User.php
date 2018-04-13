@@ -7,6 +7,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
+use PHPUnit\Framework\TestCase;
 use App\Entity\Task;
 
 /**
@@ -63,6 +64,9 @@ class User implements UserInterface
         $this->tasks = new ArrayCollection();
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function getId()
     {
         return $this->id;
@@ -130,6 +134,9 @@ class User implements UserInterface
         return $this->roles;
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function eraseCredentials()
     {
     }

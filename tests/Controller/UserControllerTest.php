@@ -3,7 +3,12 @@
 namespace App\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use PHPUnit\Framework\TestCase;
 
+
+/**
+ * @covers App\Controller\UserController
+ */
 class UserControllerTest extends WebTestCase
 {
 
@@ -17,9 +22,29 @@ class UserControllerTest extends WebTestCase
     {
         $this->client=static::createClient(array(), array('PHP_AUTH_USER' => 'Test', 'PHP_AUTH_PW'   => 'Test'));
         $this->admin=static::createClient(array(), array('PHP_AUTH_USER' => 'Admin', 'PHP_AUTH_PW'   => 'Admin'));
+        $this->logIn($this->client);
+        $this->logIn($this->admin);
 
     }
 
+    private function logIn($client)
+    {
+        $session = $client->getContainer()->get('session');
+
+        // the firewall context defaults to the firewall name
+        $firewallContext = 'secured_area';
+
+        $token = new UsernamePasswordToken('admin', null, $firewallContext, array('ROLE_ADMIN'));
+        $session->set('_security_'.$firewallContext, serialize($token));
+        $session->save();
+
+        $cookie = new Cookie($session->getName(), $session->getId());
+        $client->getCookieJar()->set($cookie);
+    }
+
+    /**
+     * @covers App\Controller\UserController::listAction
+     */
     public function testListAction()
     {
         $crawler = $this->admin->request('GET', '/users');
